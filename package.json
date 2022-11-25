@@ -1,0 +1,22 @@
+{
+  "name": "monkeytype-bot",
+  "version": "1.0.0",
+  "description": "bot that lets you have whatever wpm on monkeytype.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tararoshan/monkeytype-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tararoshan/monkeytype-bot/issues"
+  },
+  "homepage": "https://github.com/tararoshan/monkeytype-bot#readme",
+  "dependencies": {
+    "puppeteer": "^19.3.0"
+  }
+}
