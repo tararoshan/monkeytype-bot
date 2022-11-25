@@ -4,6 +4,7 @@
   "description": "bot that lets you have whatever wpm on monkeytype.com",
   "main": "index.js",
   "scripts": {
+    "hi": "npx ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/tararoshan/monkeytype-bot#readme",
   "dependencies": {
-    "puppeteer": "^19.3.0"
+    "@types/puppeteer": "^7.0.4",
+    "puppeteer": "^19.3.0",
+    "ts-node": "^10.9.1"
   }
 }
