@@ -11,14 +11,23 @@ import puppeteer from "puppeteer";
 // minutes    60 seconds   1 millisecond
 
 (async () => {
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch({
+    /* To watch puppeteer in real-time. */
+    headless: false,
+    /* So that the page fits the window. */
+    defaultViewport: null
+  });
   const page = await browser.newPage();
 
   console.log("checkpoint 0");
-  await page.goto("https://monkeytype.com/", {waitUntil: ["domcontentloaded", "load", "networkidle0", "networkidle2"]});
+  /* The options NEED the networkidle{0, 2} param to function properly. */
+  await page.goto("https://monkeytype.com/", {waitUntil: "networkidle2"});
+  /* Click "Reject All" cookies button. */
+  await page.click('.rejectAll');
+  
   console.log("checkpoint 1");
-  // Error: failed to find element matching selector "#words"
   const FULL_TEXT = await page.$eval('#words', el => el.innerText);
+
   console.log("checkpoint 2");
   const OUTPUT = FULL_TEXT.replaceAll('\n', ' ');
   console.log(`outputting (${OUTPUT})`);
@@ -27,6 +36,4 @@ import puppeteer from "puppeteer";
   console.log("done")
 })();
 
-
-// TODO automatically reject all
 // TODO extra keypresses at the end? get rid of that space
