@@ -1,14 +1,20 @@
 import puppeteer from "puppeteer";
 
-// const wpm : number = 70; // change this as you'd like!
-// const NUM_WORDS : number = 30; // assumes there are 30 words (the default)
-// // multiplier to convert from minutes to milliseconds
-// const MIN_MILLISECOND = 60 * 1_000;
-// const typingDelay = NUM_WORDS / wpm * MIN_MILLISECOND;
-// console.log({typingDelay});
+/* Final WPM, feel free to change it to your liking. */
+const WORDS_PER_MIN = 107;
+/* Assuming it's 30 words by default. */
+const NUM_WORDS = 30;
+const SECONDS_PER_MIN = 60;
+const MILLISECONDS_PER_SECONDS = 1_000;
 
-// 70 words    1 minute    1000 seconds
-// minutes    60 seconds   1 millisecond
+const TOTAL_MILLISECONDS = NUM_WORDS / WORDS_PER_MIN * SECONDS_PER_MIN * MILLISECONDS_PER_SECONDS;
+console.log(TOTAL_MILLISECONDS);
+
+/* Also assuming that the app will only let you type for 30 seconds. I do this
+   because the app will stop allowing input after a while of stable WPM, so
+   before you wouldn't be able to see the results screen for a while until all
+   of the original words are typed. */
+const MAX_SECONDS = 30;
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -19,21 +25,23 @@ import puppeteer from "puppeteer";
   });
   const page = await browser.newPage();
 
-  console.log("checkpoint 0");
   /* The options NEED the networkidle{0, 2} param to function properly. */
   await page.goto("https://monkeytype.com/", {waitUntil: "networkidle2"});
   /* Click "Reject All" cookies button. */
   await page.click('.rejectAll');
   
-  console.log("checkpoint 1");
   const FULL_TEXT = await page.$eval('#words', el => el.innerText);
 
-  console.log("checkpoint 2");
   const OUTPUT = FULL_TEXT.replaceAll('\n', ' ');
   console.log(`outputting (${OUTPUT})`);
-  await page.type('#words', OUTPUT, {delay: 100});
-  // await browser.close();
+
+  const MILLISECONDS_PER_LETTER = TOTAL_MILLISECONDS / OUTPUT.length;
+  console.log(MILLISECONDS_PER_LETTER);
+  const FINAL_LEN = MAX_SECONDS * MILLISECONDS_PER_SECONDS / MILLISECONDS_PER_LETTER;
+  console.log(FINAL_LEN);
+
+  await page.type('#words', OUTPUT, {delay: MILLISECONDS_PER_LETTER});
   console.log("done")
 })();
 
-// TODO extra keypresses at the end? get rid of that space
+// TODO run out of words after a certain length/count
