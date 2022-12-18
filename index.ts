@@ -1,14 +1,17 @@
 import puppeteer from "puppeteer";
 
-/* Final WPM, feel free to change it to your liking! */
-const WORDS_PER_MIN = 216;
+const MILLISECONDS_PER_SECOND = 1_000;
+const SECONDS_PER_MIN = 60;
+const NUM_MINUTES = 0.5;
+const TOTAL_MILLISECONDS = MILLISECONDS_PER_SECOND * SECONDS_PER_MIN * NUM_MINUTES;
+const MILLISECONDS_PER_MIN = MILLISECONDS_PER_SECOND * SECONDS_PER_MIN;
 /* For the 30-second typing test (default), there are 100 words to type. */
 const NUM_WORDS = 100;
-const SECONDS_PER_MIN = 60;
-const MILLISECONDS_PER_SECOND = 1_000;
+
+/* Final WPM, feel free to change it to your liking! */
+const USER_WPM = 230; // CHANGE THIS VALUE!!
 
 /* TODO this calculation is still wrong LOL */
-const TOTAL_MILLISECONDS = (NUM_WORDS * MILLISECONDS_PER_SECOND * SECONDS_PER_MIN) / WORDS_PER_MIN;
 console.log('total milliseconds ' + TOTAL_MILLISECONDS);
 
 (async () => {
@@ -27,14 +30,19 @@ console.log('total milliseconds ' + TOTAL_MILLISECONDS);
   
   /* Get the first batch of 100 words to type. */
   var curText: String = await page.$eval('#words', elem => elem.innerText);
-
-  // FOR DEBUGGING
   curText = curText.replaceAll('\n', ' ');
+
+  const WORDS_PER_CHAR = NUM_WORDS / curText.length;
+  console.log('words per char ' + WORDS_PER_CHAR);
+  const TARGET_NUM_CHAR = (TOTAL_MILLISECONDS * USER_WPM) / (MILLISECONDS_PER_MIN * WORDS_PER_CHAR); 
+  console.log('target num char ' + TARGET_NUM_CHAR);
+  var MILLISECONDS_PER_LETTER = TOTAL_MILLISECONDS / TARGET_NUM_CHAR;
+  console.log('milliseconds per letter ' + MILLISECONDS_PER_LETTER);
+  MILLISECONDS_PER_LETTER /= 1.5;
+
   console.log(`outputting\n (${curText})\n length: ${curText.length}`);
   var futurePattern = curText.substring(curText.length - 30, curText.length);
   
-  const MILLISECONDS_PER_LETTER = TOTAL_MILLISECONDS / (curText.length * 2);
-  console.log('milliseconds per letter ' + MILLISECONDS_PER_LETTER);
   
   /* Wait for a second so that we don't start typing too fast for monkeytype. */
   setTimeout(async () => {
@@ -57,6 +65,7 @@ console.log('total milliseconds ' + TOTAL_MILLISECONDS);
         futurePattern = curText.substring(curText.length - 30, curText.length);
         console.log(`cur word: ${curText.substring(charIndex, charIndex + 6)}`);
       }
+      console.log(charIndex);
     }
   }, MILLISECONDS_PER_SECOND);
 
