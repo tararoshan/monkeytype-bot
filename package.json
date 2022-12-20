@@ -4,14 +4,14 @@
   "description": "bot that lets you have whatever wpm on monkeytype.com",
   "main": "index.js",
   "scripts": {
-    "hi": "npx ts-node index.ts",
+    "typetest": "npx ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tararoshan/monkeytype-bot.git"
   },
-  "author": "",
+  "author": "Tara Roshan",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/tararoshan/monkeytype-bot/issues"
