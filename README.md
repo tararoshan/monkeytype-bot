@@ -1,5 +1,5 @@
 # monkeytype-bot
-A bot that lets you have whatever wpm on [monkeytype.com](monkeytype.com)!
+A bot that lets you have any wpm on [monkeytype.com](monkeytype.com)!
 
 ## To run
 To run, type `npm run typetest`, the shortcut I defined in package.json for `npx ts-node index.ts`.
